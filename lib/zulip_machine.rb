@@ -24,10 +24,14 @@ module ZulipMachine
   ENDPOINT = "https://api.zulip.com/v1"
 
   User = Struct.new(:bot, :deets) do
+    def email
+      deets["email"] || deets["sender_email"] # yuck :/
+    end
     def send(msg)
       bot.send_private_msg(email, msg)
     end
   end
+
   Conversation = Struct.new(:bot, :stream, :subject) do
     def send(msg)
       bot.send_stream_msg(stream, subject, msg)
