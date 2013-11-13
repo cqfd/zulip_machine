@@ -82,13 +82,6 @@ module ZulipMachine
 
     def fetch_events(q_id, event_id)
       get("/events", queue_id: q_id, last_event_id: event_id).callback do |r|
-
-        puts
-        puts "<EVENT LOG>"
-        puts r["events"]
-        puts "</EVENT LOG>"
-        puts
-
         r["events"].each { |e| handle_event(e) }
         event_id = r["events"].map { |e| e["id"] }.max
         fetch_events(q_id, event_id)
