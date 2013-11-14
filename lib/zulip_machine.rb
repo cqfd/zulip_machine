@@ -24,8 +24,8 @@ module ZulipMachine
   ENDPOINT = "https://api.zulip.com/v1"
 
   User = Struct.new(:bot, :deets) do
-    def email
-      deets["email"] || deets["sender_email"] # yuck :/
+    def method_missing(m, *args)
+      deets[m.to_s] || deets["sender_#{m}"]
     end
     def send(msg)
       bot.send_private_msg(email, msg)
